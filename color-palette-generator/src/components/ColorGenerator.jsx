@@ -34,20 +34,20 @@ const ColorGenerator = () => {
 
   const handledelete = (index) => {
     const savedInstant = savedColor.filter((_, i) => {
-     return i != index;
+      return i != index;
     });
     setSavedColor(savedInstant);
-  }
+  };
 
   const copyHandler = (color) => {
-     navigator.clipboard.writeText(color);
-     let w = window.open("", "", "width=100,height=100");
-     w.document.write("color copied");
-     w.focus();
-     setTimeout(function () {
-       w.close();
-     }, 1000);
-  }
+    navigator.clipboard.writeText(color);
+    let w = window.open("", "", "width=100,height=100");
+    w.document.write("color copied");
+    w.focus();
+    setTimeout(function () {
+      w.close();
+    }, 1000);
+  };
   return (
     <div className="h-min[100vh] flex items-center justify-center flex-col pt-10">
       <div className="flex">
