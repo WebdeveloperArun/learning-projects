@@ -48,7 +48,6 @@ const App = () => {
     const passwordObj = allPasswords[index];
     const { url, username, password, id } = passwordObj;
     setForm({ url: url, username: username, password: password });
-    localStorage.removeItem("password");
 
     const filterdPasswords = allPasswords.filter((_, e) => {
       return index !== e;
@@ -78,89 +77,128 @@ const App = () => {
   };
 
   return (
-    <div>
-      <div>
-        <h1>Password Manager</h1>
-        <div>
-          <h3>Your Passwords</h3>
-
-          <div className="relative overflow-x-auto">
-            {!allPasswords.length == 0 ? (
-              <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <div className="main flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="card w-full max-w-3xl p-6 bg-white shadow-md rounded-md">
+        <h1 className="main-heading text-2xl font-bold mb-4 text-center text-gray-800">
+          Password Manager
+        </h1>
+        <div className="upperpart mb-6">
+          <h3 className="smallheading text-xl font-semibold mb-2 text-gray-700">
+            Your Passwords
+          </h3>
+          <div>
+            {allPasswords.length !== 0 ? (
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
                   <tr>
-                    <th scope="col" className="px-6 py-3">
-                      url
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      URL
                     </th>
-                    <th scope="col" className="px-6 py-3">
-                      username
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Username
                     </th>
-                    <th scope="col" className="px-6 py-3">
-                      password
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Password
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody>
-                  {allPasswords.map((data, index) => {
-                    // console.log(data.id);
-                    return (
-                      <tr
-                        key={index}
-                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                      >
-                        <td className="px-6 py-4">{data.url}</td>
-                        <td className="px-6 py-4">{data.username}</td>
-                        <td className="px-6 py-4">{data.password}</td>
-                        <td className="px-6 py-4" onClick={() => copyHandler(index)}>copy</td>
-                        <td className="px-6 py-4" onClick={() => deleteHandler(index)}>delete</td>
-                        <td
-                          onClick={() => editHandler(index, data.id)}
-                          className="px-6 py-4"
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {allPasswords.map((data, index) => (
+                    <tr key={index} className="hover:bg-gray-100">
+                      <td className="px-6 py-4 text-sm text-gray-500">
+                        {data.url}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-500">
+                        {data.username}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-500">
+                        {data.password}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-500">
+                        <button
+                          onClick={() => copyHandler(index)}
+                          className="text-blue-500 hover:underline"
                         >
-                          edit
-                        </td>
-                      </tr>
-                    );
-                  })}
+                          Copy
+                        </button>
+                        <button
+                          onClick={() => deleteHandler(index)}
+                          className="text-red-500 hover:underline ml-2"
+                        >
+                          Delete
+                        </button>
+                        <button
+                          onClick={() => editHandler(index, data.id)}
+                          className="text-green-500 hover:underline ml-2"
+                        >
+                          Edit
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             ) : (
-              <p>No Data to show</p>
+              <p className="text-center text-gray-500">No Data to show</p>
             )}
           </div>
         </div>
-        <div>
-          <h3>Add a Password</h3>
+        <div className="mb-4">
+          <h3 className="text-xl font-semibold mb-2 text-gray-700">
+            Add a Password
+          </h3>
+          <div className="grid grid-cols-1 gap-4">
+            <Input
+              type="text"
+              value={form.url}
+              placeholder={"Enter URL"}
+              onChange={handleUrlChange}
+              className="border rounded-md p-2 w-full"
+            />
+            <Input
+              type="text"
+              value={form.username}
+              placeholder={"Enter Username"}
+              onChange={handleUsernameChange}
+              className="border rounded-md p-2 w-full"
+            />
+            <Input
+              type={hidePassword ? "password" : "text"}
+              value={form.password}
+              placeholder={"Enter Password"}
+              onChange={handlePasswordChange}
+              className="border rounded-md p-2 w-full"
+            />
+            <button
+              onClick={() => setHidePassword(!hidePassword)}
+              className="mt-2 text-sm text-blue-500 hover:underline"
+            >
+              {hidePassword ? "Show Password" : "Hide Password"}
+            </button>
+          </div>
         </div>
         <div>
-          <Input
-            type="text"
-            value={form.url}
-            placeholder={"enter url"}
-            onChange={handleUrlChange}
-          />
-          <Input
-            type="text"
-            value={form.username}
-            placeholder={"enter username"}
-            onChange={handleUsernameChange}
-          />
-          <Input
-            type={hidePassword ? "password" : "text"}
-            value={form.password}
-            placeholder={"enter password"}
-            onChange={handlePasswordChange}
-          />
           <button
-            onClick={() => {
-              setHidePassword(!hidePassword);
-            }}
+            onClick={() => addPassword()}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
           >
-            {hidePassword ? "showPassword" : "hidePassword"}
+            Add Password
           </button>
-        </div>
-        <div>
-          <button onClick={() => addPassword()}>Add Password</button>
         </div>
       </div>
     </div>
